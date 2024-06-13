@@ -12,12 +12,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.loguin = exports.nuevoUsuario = void 0;
+exports.loguin = exports.nuevoUsuario = exports.obtenerUsuarios = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const users_1 = require("../models/users");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const obtenerUsuarios = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const usuarios = yield users_1.User.findAll();
+        res.json(usuarios);
+    }
+    catch (error) {
+        res.status(500).json({
+            msg: 'Error al obtener usuarios',
+            error
+        });
+    }
+});
+exports.obtenerUsuarios = obtenerUsuarios;
 const nuevoUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { nombreusuario, contrasena } = req.body;
+    const { nombreusuario, contrasena, correo, role } = req.body;
     //validacion de usuario duplicado
     const user = yield users_1.User.findOne({ where: { nombreusuario: nombreusuario } });
     if (user) {
@@ -29,15 +42,19 @@ const nuevoUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     try {
         yield users_1.User.create({
             nombreusuario: nombreusuario,
-            contrasena: hashpassword
+            contrasena: hashpassword,
+            role: role,
+            correo: correo
         });
         res.json({
             msg: `usuario ${nombreusuario} creado exitosamente`,
         });
     }
     catch (error) {
-        res.status(400).json;
-        msg: 'error al crear usuario';
+        console.error('Error al crear usuario:', error);
+        res.status(500).json({
+            msg: 'error al crear usuario'
+        });
     }
 });
 exports.nuevoUsuario = nuevoUsuario;
@@ -58,6 +75,6 @@ const loguin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const token = jsonwebtoken_1.default.sign({
         nombreusuario: nombreusuario
     }, process.env.SECRETKEY || 'contraseña123');
-    res.json({ token });
+    res.json({ token, user });
 });
 exports.loguin = loguin;

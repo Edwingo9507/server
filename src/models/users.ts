@@ -1,6 +1,5 @@
 
-import sequelize from '../db/conexiondb';
-import { DataType, DataTypes } from 'sequelize';
+import { DataTypes } from 'sequelize';
 
 import db from '../db/conexiondb';
 
@@ -8,31 +7,39 @@ import db from '../db/conexiondb';
 
 
 
- export const User =db.define('usuario',{
+export const User = db.define('usuario', {
 
-    id:{
-        type:DataTypes.INTEGER,
-        primaryKey:true,
-        autoIncrement:true
-       },
-
-    nombreusuario:{
-        type:DataTypes.STRING,
-        unique:true,
-        allowNull:false,
-        
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
     },
 
-    contrasena:{
-        type:DataTypes.STRING,
-        allowNull:false,
+    nombreusuario: {
+        type: DataTypes.STRING,
+        unique: true,
+        allowNull: false,
 
     },
 
+    contrasena: {
+        type: DataTypes.STRING,
+        allowNull: false,
 
-    
+    },
+
+    role: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    correo: {
+        type: DataTypes.STRING,
+        allowNull: false,
+     },
+
+
 }, {
 
-    createdAt:false,
-    updatedAt:false
-} )
+    createdAt: false,
+    updatedAt: false
+})

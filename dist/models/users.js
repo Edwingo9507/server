@@ -21,6 +21,14 @@ exports.User = conexiondb_1.default.define('usuario', {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
     },
+    role: {
+        type: sequelize_1.DataTypes.INTEGER,
+        allowNull: false,
+    },
+    correo: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false,
+    },
 }, {
     createdAt: false,
     updatedAt: false
